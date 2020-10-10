@@ -69,21 +69,25 @@ public class Board {
 			} else {
 				table[row][col] = 1;
 				mainFrame.updateMove(false, col, row);
-				}
+			}
 		} else if (nSteps % 2 != 0) {
 			table[row][col] = 1;
 			mainFrame.updateMove(true, col, row);
 		} else {
 			table[row][col] = -1;
 			mainFrame.updateMove(false, col, row);
-			}
+		}
 
 		checkFinalState(row, col, table[row][col]);
-		if (isGameOver)
+		if (isGameOver) {
+			mainFrame.getScore(getTurn());
 			mainFrame.showDialogEndGame(getTurn());
-		else
-		if (nSteps == getN()*getN())
-			mainFrame.showDialogEndGame(0);
+
+		} else {
+			if (nSteps == getN() * getN())
+				mainFrame.showDialogEndGame(0);
+
+		}
 	}
 
 	public void deleteMove() {
@@ -265,7 +269,6 @@ public class Board {
 	public void setY(int[] y) {
 		Board.y = y;
 	}
-
 
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];
