@@ -24,7 +24,7 @@ public class Board {
 	public Board(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		n = defaultN = 20;
-		maxN = 30;
+		maxN = 40;
 		lengthWin = 5;
 		nUserWin = 0;
 		nComputerWin = 0;

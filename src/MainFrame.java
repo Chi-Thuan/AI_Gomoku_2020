@@ -373,7 +373,7 @@ public class MainFrame extends JFrame {
 						// bây giờ user chọn thành người chơi trước
 						return;
 					}
-				} else {
+				} else if (Board.humanFirst) {
 					board.setHumanFirst(false);
 					play();
 					// TODO xử lý khi đang là người chơi trước,
