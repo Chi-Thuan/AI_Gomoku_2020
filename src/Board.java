@@ -266,13 +266,6 @@ public class Board {
 		Board.y = y;
 	}
 
-	public int getCurrentX() {
-		return x[nSteps - 1];
-	}
-
-	public int getCurrentY() {
-		return y[nSteps - 1];
-	}
 
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];

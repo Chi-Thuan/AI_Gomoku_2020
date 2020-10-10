@@ -563,16 +563,25 @@ public class MainFrame extends JFrame {
 	}
 
 	public static final String X_WIN = "X Win";
-	public static final String Y_WIN = "Y Win";
+	public static final String O_WIN = "O Win";
 	public static final String DRAW = "DRAW";
 
 	public void showDialogEndGame(int winner) {
-		if (winner == -1) // white == true => Black wins
-			JOptionPane.showMessageDialog(null, X_WIN);
-		else if (winner == 1)
-			JOptionPane.showMessageDialog(null, Y_WIN);
-		else
-			JOptionPane.showMessageDialog(null, DRAW);
+		if (board.userX) {
+			if (winner == -1) // white == true => Black wins
+				JOptionPane.showMessageDialog(null, X_WIN);
+			else if (winner == 1)
+				JOptionPane.showMessageDialog(null, O_WIN);
+			else
+				JOptionPane.showMessageDialog(null, DRAW);
+		} else {
+			if (winner == 1) // white == true => Black wins
+				JOptionPane.showMessageDialog(null, X_WIN);
+			else if (winner == -1)
+				JOptionPane.showMessageDialog(null, O_WIN);
+			else
+				JOptionPane.showMessageDialog(null, DRAW);
+		}
 		play();
 	}
 }

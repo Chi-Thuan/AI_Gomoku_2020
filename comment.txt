@@ -1,10 +1,2 @@
-Override phương thức toString trong class Board
-=>>> khi debug sẽ hiện cái bảng board ra.
-
-Bổ sung updateMove, checkFinalState và showDialogEndGame trông addMove() trong class Board luôn.
-=>>> đỡ phải mỗi lần thay đổi gì phải gọi từng phương thức check nữa. giờ chỉ cần addMove là nó kiểm tra hết r. 
-
-Phương thức checkFinalState chuyển sang class Board luôn.
-=>>> Đỡ phải lấy dữ liệu từ Board qua Ai check, lấy thẳng ở Board luôn, bỏ đc cái phương thức getCurrentX,Y,...
-
-Thêm tính năng check hòa trong checkFinalState
+fix bug :
+_ Tính năng thông báo người chiến thắng. Có thể sử dụng khi xài "play as O"
