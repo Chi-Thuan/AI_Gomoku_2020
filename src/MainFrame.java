@@ -270,11 +270,11 @@ public class MainFrame extends JFrame {
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
+			Board.nSteps = 1;
 			ai.move();
 			// TODO code xử lý trong method move() cho AI
 			// có thể thêm nhiều tham số cho method này, tạm thời để vậy
 		}
-
 		EventObject anEvent;
 		while (true) {
 
@@ -342,12 +342,14 @@ public class MainFrame extends JFrame {
 				if (cbbWhoFirst.getSelectedIndex() == 0) {
 					if (!Board.humanFirst) {
 						board.setHumanFirst(true);
+						play();
 						// TODO xử lý khi đang là máy chơi trước,
 						// bây giờ user chọn thành người chơi trước
 						return;
 					}
 				} else if (Board.humanFirst) {
 					board.setHumanFirst(false);
+					play();
 					// TODO xử lý khi đang là người chơi trước,
 					// bây giờ user chọn thành máy chơi trước
 					return;
