@@ -373,7 +373,7 @@ public class MainFrame extends JFrame {
 						// bây giờ user chọn thành người chơi trước
 						return;
 					}
-				} else if (Board.humanFirst) {
+				} else {
 					board.setHumanFirst(false);
 					play();
 					// TODO xử lý khi đang là người chơi trước,
@@ -616,23 +616,50 @@ public class MainFrame extends JFrame {
 	}
 
 	public void getScore(int winner) {
-		if (board.userX) {
-			if (winner == -1) {
-				userScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-			} else if (winner == 1) {
-				aiScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+		if (board.isHumanFirst() == true) {
+			if (board.userX) {
+				if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
 			}
-		} else {
-			if (winner == 1) {
-				aiScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-			} else if (winner == -1) {
-				userScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+		}else {
+			if (board.userX) {
+				if (winner == -1) {
+					aiScore++;;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
 			}
 		}
+
 	}
 
 }
