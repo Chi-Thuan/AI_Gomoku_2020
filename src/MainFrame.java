@@ -282,7 +282,6 @@ public class MainFrame extends JFrame {
 	public void play() {
 		clearBoard();
 		drawBoard();
-
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
@@ -302,16 +301,16 @@ public class MainFrame extends JFrame {
 						if ((mouseY > marginBoard) && (mouseY < marginBoard + boardSize)) {
 							int boardX = (mouseX - marginBoard) / lengthCell;
 							int boardY = (mouseY - marginBoard) / lengthCell;
-							if (board.isCanMove(boardY, boardX)) {
+							if (board.isCanMove(boardY, boardX) && !board.isGameOver) {
 								board.addMove(boardY, boardX);
-//								updateMove(true, boardX, boardY);
+								// updateMove(true, boardX, boardY);
 								//
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
 								// return;
 								// }
-
-								ai.move();
+								if (!board.isGameOver)
+									ai.move();
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
 								// return;
@@ -324,7 +323,7 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
-				
+
 				clearScore();
 				play();
 				return;
@@ -589,28 +588,31 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	public static final String X_WIN = "X Win";
-	public static final String O_WIN = "O Win";
-	public static final String DRAW = "DRAW";
+	public static final String X_WIN = "X Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String O_WIN = "O Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String DRAW = "DRAW\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String SURRENDER = "SURRENDER!!!";
+	private int option;
 
 	public void showDialogEndGame(int winner) {
 		if (board.userX) {
 			if (winner == -1) // white == true => Black wins
-				JOptionPane.showMessageDialog(null, X_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == 1)
-				JOptionPane.showMessageDialog(null, O_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				JOptionPane.showMessageDialog(null, DRAW);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		} else {
 			if (winner == 1) // white == true => Black wins
-				JOptionPane.showMessageDialog(null, X_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == -1)
-				JOptionPane.showMessageDialog(null, O_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				JOptionPane.showMessageDialog(null, DRAW);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		}
-		play();
+
+		if (option == JOptionPane.YES_OPTION)
+			play();
 	}
 
 	public void getScore(int winner) {
@@ -635,10 +637,11 @@ public class MainFrame extends JFrame {
 					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
 				}
 			}
-		}else {
+		} else {
 			if (board.userX) {
 				if (winner == -1) {
-					aiScore++;;
+					aiScore++;
+					;
 					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
 				} else if (winner == 1) {
 					userScore++;
