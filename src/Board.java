@@ -40,6 +40,7 @@ public class Board {
 	}
 
 	public void clearData() {
+
 		nSteps = 0;
 		for (boolean[] arr : used)
 			for (int i = 0; i < n; i++)
@@ -64,7 +65,7 @@ public class Board {
 		nSteps++;
 		if (Board.humanFirst) {
 			if (nSteps % 2 != 0) {
-				table[row][col] = -1; // -1 là người
+				table[row][col] = -1; // -1 lĂ  ngÆ°á»�i
 				mainFrame.updateMove(true, col, row);
 			} else {
 				table[row][col] = 1;
@@ -178,6 +179,59 @@ public class Board {
 
 		return false;
 	}
+
+	// Xóa điểm
+	public void resetScore() {
+		nUserWin = 0;
+		nComputerWin = 0;
+	}
+
+	// Hàm tính điểm
+	public void score(int winner) {
+		if (isHumanFirst() == true) {
+			if (userX) {
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+
+			} else {
+
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+			}
+		} else {
+			if (userX) {
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+
+			} else {
+
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+			}
+		}
+
+	}
+
 	// getters & setters
 
 	public byte getN() {

@@ -53,8 +53,6 @@ public class MainFrame extends JFrame {
 	private int height;
 	private short widthButton;
 	private short heightButton;
-	private int userScore;
-	private int aiScore;
 
 	private Color defaultColorX;
 	private Color defaultColorO;
@@ -107,7 +105,7 @@ public class MainFrame extends JFrame {
 		int marginButton = 50;
 		short scoreTextWidth = 250;
 		int textPositionX = widthCanvas + (widthPanel - scoreTextWidth) / 2;
-		panel.add(txtScoreText = new JTextField("User " + userScore + " : " + aiScore + " Computer"));
+		panel.add(txtScoreText = new JTextField("User 0 : 0 Computer"));
 		txtScoreText.setEditable(false);
 		txtScoreText.setFocusable(false);
 		txtScoreText.setHorizontalAlignment(JTextField.CENTER);
@@ -215,9 +213,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void clearScore() {
-		userScore = 0;
-		aiScore = 0;
-		txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+		board.resetScore();
+		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 
@@ -282,7 +279,6 @@ public class MainFrame extends JFrame {
 	public void play() {
 		clearBoard();
 		drawBoard();
-
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
@@ -326,20 +322,21 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
-
 				clearScore();
 				play();
 				return;
 			}
-
 			if (name.equals("Surrender")) {
-				aiScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
-				play();
-				return;
-			}
+				if (btnNewGame.getModel().isPressed() == true) {
 
+					int aiScore = board.getnComputerWin() + 1;
+					txtScoreText.setText("User " + board.getnComputerWin() + " : " + aiScore + " Computer");
+					JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
+					play();
+					return;
+
+				}
+			}
 			if (name.equals("Undo")) {
 				undoMove();
 				continue;
@@ -616,50 +613,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void getScore(int winner) {
-		if (board.isHumanFirst() == true) {
-			if (board.userX) {
-				if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				} else if (winner == 1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-
-			} else {
-
-				if (winner == 1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-
-				} else if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-			}
-		} else {
-			if (board.userX) {
-				if (winner == 1) {
-					aiScore++;
-					;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				} else if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-
-			} else {
-
-				if (winner == 1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-
-				} else if (winner == -1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-			}
-		}
+		board.score(winner);
+		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 
