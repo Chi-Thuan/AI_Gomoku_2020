@@ -17,14 +17,14 @@ public class Board {
 	public static int[] x; // Lưu phần row của các nước đi
 	public static int[] y; // Lưu phần column của các nước đi
 	public static int[][] table; // Lưu các nước đi
-	static Boolean isGameOver;
+	public static boolean isGameOver;
 
 	static MainFrame mainFrame;
 
 	public Board(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		n = defaultN = 20;
-		maxN = 40;
+		maxN = 30;
 		lengthWin = 5;
 		nUserWin = 0;
 		nComputerWin = 0;
@@ -64,7 +64,7 @@ public class Board {
 		nSteps++;
 		if (Board.humanFirst) {
 			if (nSteps % 2 != 0) {
-				table[row][col] = -1;
+				table[row][col] = -1; // -1 là người
 				mainFrame.updateMove(true, col, row);
 			} else {
 				table[row][col] = 1;
@@ -72,10 +72,10 @@ public class Board {
 			}
 		} else if (nSteps % 2 != 0) {
 			table[row][col] = 1;
-			mainFrame.updateMove(true, col, row);
+			mainFrame.updateMove(false, col, row);
 		} else {
 			table[row][col] = -1;
-			mainFrame.updateMove(false, col, row);
+			mainFrame.updateMove(true, col, row);
 		}
 
 		checkFinalState(row, col, table[row][col]);
@@ -86,7 +86,6 @@ public class Board {
 		} else {
 			if (nSteps == getN() * getN())
 				mainFrame.showDialogEndGame(0);
-
 		}
 	}
 
@@ -113,7 +112,7 @@ public class Board {
 			col--;
 		}
 		col = col1;
-		while (col + 1 <= getN() && table[row][col + 1] == value) {
+		while (col + 1 <= getN() - 1 && table[row][col + 1] == value) {
 			checkRow++;
 			col++;
 		}
@@ -129,7 +128,7 @@ public class Board {
 			row--;
 		}
 		row = row1;
-		while (row + 1 <= getN() && table[row + 1][col] == value) {
+		while (row + 1 <= getN() - 1 && table[row + 1][col] == value) {
 			checkCol++;
 			row++;
 		}
@@ -148,7 +147,7 @@ public class Board {
 		}
 		row = row1;
 		col = col1;
-		while (row + 1 <= getN() && col + 1 <= getN() && table[row + 1][col + 1] == value) {
+		while (row + 1 <= getN() - 1 && col + 1 <= getN() - 1 && table[row + 1][col + 1] == value) {
 			checkDiagonalFromTopLeft++;
 			row++;
 			col++;
@@ -161,14 +160,14 @@ public class Board {
 		int checkDiagonalFromTopRight = 0;
 		row = row1;
 		col = col1;
-		while (row - 1 >= 0 && col + 1 <= getN() && table[row - 1][col + 1] == value) {
+		while (row - 1 >= 0 && col + 1 <= getN() - 1 && table[row - 1][col + 1] == value) {
 			checkDiagonalFromTopRight++;
 			row--;
 			col++;
 		}
 		row = row1;
 		col = col1;
-		while (row + 1 <= getN() && col - 1 >= 0 && table[row + 1][col - 1] == value) {
+		while (row + 1 <= getN() - 1 && col - 1 >= 0 && table[row + 1][col - 1] == value) {
 			checkDiagonalFromTopRight++;
 			row++;
 			col--;

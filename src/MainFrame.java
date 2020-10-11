@@ -286,7 +286,6 @@ public class MainFrame extends JFrame {
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
-			Board.nSteps = 1;
 			ai.move();
 			// TODO code xử lý trong method move() cho AI
 			// có thể thêm nhiều tham số cho method này, tạm thời để vậy
@@ -307,7 +306,7 @@ public class MainFrame extends JFrame {
 							if (board.isCanMove(boardY, boardX)) {
 								board.addMove(boardY, boardX);
 
-								updateMove(true, boardX, boardY);
+//								updateMove(true, boardX, boardY);
 								//
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
@@ -327,6 +326,7 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
+				
 				clearScore();
 				play();
 				return;
