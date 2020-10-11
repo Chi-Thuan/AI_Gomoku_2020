@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
 	private JButton btnNewGame;
 	private JButton btnUndo;
 	private JButton btnAbout;
+	private JButton btnSurrender;
 	private JComboBox<String> cbbLevel;
 	private JLabel lblColorX;
 	private JLabel lblColorO;
@@ -52,6 +53,8 @@ public class MainFrame extends JFrame {
 	private int height;
 	private short widthButton;
 	private short heightButton;
+	private int userScore;
+	private int aiScore;
 
 	private Color defaultColorX;
 	private Color defaultColorO;
@@ -104,7 +107,7 @@ public class MainFrame extends JFrame {
 		int marginButton = 50;
 		short scoreTextWidth = 250;
 		int textPositionX = widthCanvas + (widthPanel - scoreTextWidth) / 2;
-		panel.add(txtScoreText = new JTextField("User 0 — 0 Computer"));
+		panel.add(txtScoreText = new JTextField("User " + userScore + " : " + aiScore + " Computer"));
 		txtScoreText.setEditable(false);
 		txtScoreText.setFocusable(false);
 		txtScoreText.setHorizontalAlignment(JTextField.CENTER);
@@ -115,63 +118,67 @@ public class MainFrame extends JFrame {
 		btnNewGame.setFocusPainted(false);
 		btnNewGame.setBounds(buttonPositionX, 2 * marginButton, widthButton, heightButton);
 
+		panel.add(btnSurrender = new JButton("Surrender"));
+		btnSurrender.setFocusPainted(false);
+		btnSurrender.setBounds(buttonPositionX, 3 * marginButton, widthButton, heightButton);
+
 		panel.add(btnUndo = new JButton("Undo"));
 		btnUndo.setFocusPainted(false);
-		btnUndo.setBounds(buttonPositionX, 3 * marginButton, widthButton, heightButton);
+		btnUndo.setBounds(buttonPositionX, 4 * marginButton, widthButton, heightButton);
 
 		int labelPositionX = widthCanvas + marginButton;
 		JLabel lblBoardSize = new JLabel("Board size:");
 		panel.add(lblBoardSize);
-		lblBoardSize.setBounds(labelPositionX, 4 * marginButton, widthButton, heightButton);
+		lblBoardSize.setBounds(labelPositionX, 5 * marginButton, widthButton, heightButton);
 
 		short widthCombobox = 160;
 		panel.add(cbbBoardSize = new JComboBox<>(boardSizeData));
-		cbbBoardSize.setBounds(labelPositionX + widthButton, 4 * marginButton, widthCombobox, heightButton);
+		cbbBoardSize.setBounds(labelPositionX + widthButton, 5 * marginButton, widthCombobox, heightButton);
 
 		JLabel lblLevel = new JLabel("Level:");
 		panel.add(lblLevel);
-		lblLevel.setBounds(labelPositionX, 5 * marginButton, widthButton, heightButton);
+		lblLevel.setBounds(labelPositionX, 6 * marginButton, widthButton, heightButton);
 
 		panel.add(cbbLevel = new JComboBox<>(levelData));
-		cbbLevel.setBounds(labelPositionX + widthButton, 5 * marginButton, widthCombobox, heightButton);
+		cbbLevel.setBounds(labelPositionX + widthButton, 6 * marginButton, widthCombobox, heightButton);
 
 		JLabel lblWhoFirst = new JLabel("Plays first:");
 		panel.add(lblWhoFirst);
-		lblWhoFirst.setBounds(labelPositionX, 6 * marginButton, widthButton, heightButton);
+		lblWhoFirst.setBounds(labelPositionX, 7 * marginButton, widthButton, heightButton);
 
 		panel.add(cbbWhoFirst = new JComboBox<>(whoFirstData));
-		cbbWhoFirst.setBounds(labelPositionX + widthButton, 6 * marginButton, widthCombobox, heightButton);
+		cbbWhoFirst.setBounds(labelPositionX + widthButton, 7 * marginButton, widthCombobox, heightButton);
 
 		JLabel lblRepresent = new JLabel("User:");
 		panel.add(lblRepresent);
-		lblRepresent.setBounds(labelPositionX, 7 * marginButton, widthButton, heightButton);
+		lblRepresent.setBounds(labelPositionX, 8 * marginButton, widthButton, heightButton);
 
 		panel.add(cbbRepresent = new JComboBox<>(representData));
-		cbbRepresent.setBounds(labelPositionX + widthButton, 7 * marginButton, widthCombobox, heightButton);
+		cbbRepresent.setBounds(labelPositionX + widthButton, 8 * marginButton, widthCombobox, heightButton);
 
 		lblColorX = new JLabel("Color of X:");
 		panel.add(lblColorX);
-		lblColorX.setBounds(labelPositionX, 8 * marginButton, widthButton, heightButton);
+		lblColorX.setBounds(labelPositionX, 9 * marginButton, widthButton, heightButton);
 		lblColorX.setOpaque(true);
 		lblColorX.setBackground(colorX);
 
 		panel.add(cbbColorX = new JComboBox<>(colorSelectionData));
-		cbbColorX.setBounds(labelPositionX + widthButton, 8 * marginButton, widthCombobox, heightButton);
+		cbbColorX.setBounds(labelPositionX + widthButton, 9 * marginButton, widthCombobox, heightButton);
 		cbbColorX.setRenderer(new MyRendererCombobox(cbbColorX.getRenderer()));
 
 		lblColorO = new JLabel("Color of O:");
 		panel.add(lblColorO);
-		lblColorO.setBounds(labelPositionX, 9 * marginButton, widthButton, heightButton);
+		lblColorO.setBounds(labelPositionX, 10 * marginButton, widthButton, heightButton);
 		lblColorO.setOpaque(true);
 		lblColorO.setBackground(colorO);
 
 		panel.add(cbbColorO = new JComboBox<>(colorSelectionData));
-		cbbColorO.setBounds(labelPositionX + widthButton, 9 * marginButton, widthCombobox, heightButton);
+		cbbColorO.setBounds(labelPositionX + widthButton, 10 * marginButton, widthCombobox, heightButton);
 		cbbColorO.setRenderer(new MyRendererCombobox(cbbColorO.getRenderer()));
 
 		panel.add(btnAbout = new JButton("About"));
 		btnAbout.setFocusPainted(false);
-		btnAbout.setBounds(buttonPositionX, 10 * marginButton, widthButton, heightButton);
+		btnAbout.setBounds(buttonPositionX, 11 * marginButton, widthButton, heightButton);
 	}
 
 	public void initEventListener() {
@@ -180,6 +187,7 @@ public class MainFrame extends JFrame {
 		events.listenTo(btnNewGame, "NewGame");
 		events.listenTo(btnUndo, "Undo");
 		events.listenTo(btnAbout, "About");
+		events.listenTo(btnSurrender, "Surrender");
 		events.listenTo(cbbLevel, "Level");
 		events.listenTo(cbbBoardSize, "BoardSize");
 		events.listenTo(cbbWhoFirst, "whoFirst");
@@ -204,6 +212,13 @@ public class MainFrame extends JFrame {
 
 	public void clearBoard() {
 		canvas.setBackground(panel.getBackground());
+	}
+
+	public void clearScore() {
+		userScore = 0;
+		aiScore = 0;
+		txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
 	}
 
 	public short getLengthCell() {
@@ -267,6 +282,7 @@ public class MainFrame extends JFrame {
 	public void play() {
 		clearBoard();
 		drawBoard();
+
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
@@ -274,7 +290,6 @@ public class MainFrame extends JFrame {
 			// TODO code xử lý trong method move() cho AI
 			// có thể thêm nhiều tham số cho method này, tạm thời để vậy
 		}
-
 		EventObject anEvent;
 		while (true) {
 
@@ -287,11 +302,9 @@ public class MainFrame extends JFrame {
 						if ((mouseY > marginBoard) && (mouseY < marginBoard + boardSize)) {
 							int boardX = (mouseX - marginBoard) / lengthCell;
 							int boardY = (mouseY - marginBoard) / lengthCell;
-
 							if (board.isCanMove(boardY, boardX)) {
 								board.addMove(boardY, boardX);
-
-								updateMove(true, boardX, boardY);
+//								updateMove(true, boardX, boardY);
 								//
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
@@ -311,6 +324,16 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
+				
+				clearScore();
+				play();
+				return;
+			}
+
+			if (name.equals("Surrender")) {
+				aiScore++;
+				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
 				play();
 				return;
 			}
@@ -325,7 +348,7 @@ public class MainFrame extends JFrame {
 			}
 
 			if (name.equals("Level")) {
-				// TODO chọn thuật toán cho AI sử dụng, ...
+				// TODO chá»�n thuáº­t toĂ¡n cho AI sá»­ dá»¥ng, ...
 			}
 
 			if (name.equals("ColorX")) {
@@ -342,17 +365,20 @@ public class MainFrame extends JFrame {
 				if (cbbWhoFirst.getSelectedIndex() == 0) {
 					if (!Board.humanFirst) {
 						board.setHumanFirst(true);
+
+						play();
 						// TODO xử lý khi đang là máy chơi trước,
 						// bây giờ user chọn thành người chơi trước
 						return;
 					}
 				} else if (Board.humanFirst) {
 					board.setHumanFirst(false);
+					play();
 					// TODO xử lý khi đang là người chơi trước,
 					// bây giờ user chọn thành máy chơi trước
 					return;
+
 				}
-				continue;
 			}
 
 			if (name.equals("Represent")) {
@@ -372,7 +398,7 @@ public class MainFrame extends JFrame {
 				if (getBoardSize(cbbBoardSize.getSelectedIndex()) != board.getN()) {
 					board.setN(getBoardSize(cbbBoardSize.getSelectedIndex()));
 					play();
-					// TODO khi đổi kích thước bàn cờ
+					// TODO khi Ä‘á»•i kĂ­ch thÆ°á»›c bĂ n cá»�
 					return;
 				}
 				continue;
@@ -380,6 +406,7 @@ public class MainFrame extends JFrame {
 			unfocusAllCombobox();
 
 		}
+
 	}
 
 	public byte getBoardSize(int index) {
@@ -565,6 +592,7 @@ public class MainFrame extends JFrame {
 	public static final String X_WIN = "X Win";
 	public static final String O_WIN = "O Win";
 	public static final String DRAW = "DRAW";
+	public static final String SURRENDER = "SURRENDER!!!";
 
 	public void showDialogEndGame(int winner) {
 		if (board.userX) {
@@ -584,4 +612,52 @@ public class MainFrame extends JFrame {
 		}
 		play();
 	}
+
+	public void getScore(int winner) {
+		if (board.isHumanFirst() == true) {
+			if (board.userX) {
+				if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+			}
+		}else {
+			if (board.userX) {
+				if (winner == -1) {
+					aiScore++;;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+			}
+		}
+
+	}
+
 }

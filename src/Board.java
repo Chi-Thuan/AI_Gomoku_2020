@@ -17,7 +17,7 @@ public class Board {
 	public static int[] x; // Lưu phần row của các nước đi
 	public static int[] y; // Lưu phần column của các nước đi
 	public static int[][] table; // Lưu các nước đi
-	static Boolean isGameOver;
+	public static boolean isGameOver;
 
 	static MainFrame mainFrame;
 
@@ -64,26 +64,29 @@ public class Board {
 		nSteps++;
 		if (Board.humanFirst) {
 			if (nSteps % 2 != 0) {
-				table[row][col] = -1;
+				table[row][col] = -1; // -1 là người
 				mainFrame.updateMove(true, col, row);
 			} else {
 				table[row][col] = 1;
 				mainFrame.updateMove(false, col, row);
-				}
+			}
 		} else if (nSteps % 2 != 0) {
 			table[row][col] = 1;
-			mainFrame.updateMove(true, col, row);
+			mainFrame.updateMove(false, col, row);
 		} else {
 			table[row][col] = -1;
-			mainFrame.updateMove(false, col, row);
-			}
+			mainFrame.updateMove(true, col, row);
+		}
 
 		checkFinalState(row, col, table[row][col]);
-		if (isGameOver)
+		if (isGameOver) {
+			mainFrame.getScore(getTurn());
 			mainFrame.showDialogEndGame(getTurn());
-		else
-		if (nSteps == getN()*getN())
-			mainFrame.showDialogEndGame(0);
+
+		} else {
+			if (nSteps == getN() * getN())
+				mainFrame.showDialogEndGame(0);
+		}
 	}
 
 	public void deleteMove() {
@@ -99,81 +102,93 @@ public class Board {
 	}
 
 	// Hàm kiểm tra thắng thua
-	public boolean checkFinalState(int row, int col, int value) {
+	public void checkFinalState(int row, int col, int value) {
 
+		int tempRow = row;
+		int tempCol = col;
+		
 		// check row
 		int checkRow = 0;
-		int col1 = col;
+
 		while (col - 1 >= 0 && table[row][col - 1] == value) {
 			checkRow++;
 			col--;
 		}
-		col = col1;
-		while (col + 1 <= getN() && table[row][col + 1] == value) {
+		col = tempCol;
+		while (col + 1 <= getN() - 1 && table[row][col + 1] == value) {
 			checkRow++;
 			col++;
 		}
-
-		if (checkRow >= getLengthWin() - 1)
-			return isGameOver = true;
-
+		if (checkRow >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
+		
+			
 		// check column
+		col = tempCol;
 		int checkCol = 0;
-		int row1 = row;
 		while (row - 1 >= 0 && table[row - 1][col] == value) {
 			checkCol++;
 			row--;
 		}
-		row = row1;
-		while (row + 1 <= getN() && table[row + 1][col] == value) {
+		row = tempRow;
+		while (row + 1 <= getN() - 1 && table[row + 1][col] == value) {
 			checkCol++;
 			row++;
 		}
 
-		if (checkCol >= getLengthWin() - 1)
-			return isGameOver = true;
-
+		if (checkCol >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
+		
+		
 		// checkDiagonalFromTopLeft
 		int checkDiagonalFromTopLeft = 0;
-		row = row1;
-		col = col1;
+		row = tempRow;
+		col = tempCol;
 		while (row - 1 >= 0 && col - 1 >= 0 && table[row - 1][col - 1] == value) {
 			checkDiagonalFromTopLeft++;
 			row--;
 			col--;
 		}
-		row = row1;
-		col = col1;
-		while (row + 1 <= getN() && col + 1 <= getN() && table[row + 1][col + 1] == value) {
+		row = tempRow;
+		col = tempCol;
+		while (row + 1 <= getN() - 1 && col + 1 <= getN() - 1 && table[row + 1][col + 1] == value) {
 			checkDiagonalFromTopLeft++;
 			row++;
 			col++;
 		}
 
-		if (checkDiagonalFromTopLeft >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkDiagonalFromTopLeft >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
 
+		
 		// checkDiagonalFromTopRight
 		int checkDiagonalFromTopRight = 0;
-		row = row1;
-		col = col1;
-		while (row - 1 >= 0 && col + 1 <= getN() && table[row - 1][col + 1] == value) {
+		row = tempRow;
+		col = tempCol;
+		while (row - 1 >= 0 && col + 1 <= getN() - 1 && table[row - 1][col + 1] == value) {
 			checkDiagonalFromTopRight++;
 			row--;
 			col++;
 		}
-		row = row1;
-		col = col1;
-		while (row + 1 <= getN() && col - 1 >= 0 && table[row + 1][col - 1] == value) {
+		row = tempRow;
+		col = tempCol;
+		while (row + 1 <= getN() - 1 && col - 1 >= 0 && table[row + 1][col - 1] == value) {
 			checkDiagonalFromTopRight++;
 			row++;
 			col--;
 		}
 
-		if (checkDiagonalFromTopRight >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkDiagonalFromTopRight >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
 
-		return false;
+		}
 	}
 	// getters & setters
 
@@ -266,7 +281,6 @@ public class Board {
 		Board.y = y;
 	}
 
-
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];
 	}
@@ -290,20 +304,17 @@ public class Board {
 
 		for (int x = 0; x < getN(); x++) {
 			for (int y = 0; y < getN(); y++) {
-
 				if (table[x][y] == 0) {
 					sb.append("-");
 				} else {
 					sb.append(table[x][y]);
 				}
 				sb.append(" ");
-
 			}
 			if (x != getN() - 1) {
 				sb.append("\n");
 			}
-		}
-
+		}           
 		return new String(sb);
 	}
 }
