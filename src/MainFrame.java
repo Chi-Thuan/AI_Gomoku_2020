@@ -326,7 +326,7 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
-				
+
 				clearScore();
 				play();
 				return;
@@ -350,7 +350,7 @@ public class MainFrame extends JFrame {
 			}
 
 			if (name.equals("Level")) {
-				// TODO chá»�n thuáº­t toĂ¡n cho AI sá»­ dá»¥ng, ...
+				// TODO chĂ¡Â»ï¿½n thuĂ¡ÂºÂ­t toÄ‚Â¡n cho AI sĂ¡Â»Â­ dĂ¡Â»Â¥ng, ...
 			}
 
 			if (name.equals("ColorX")) {
@@ -400,7 +400,7 @@ public class MainFrame extends JFrame {
 				if (getBoardSize(cbbBoardSize.getSelectedIndex()) != board.getN()) {
 					board.setN(getBoardSize(cbbBoardSize.getSelectedIndex()));
 					play();
-					// TODO khi Ä‘á»•i kĂ­ch thÆ°á»›c bĂ n cá»�
+					// TODO khi Ă„â€˜Ă¡Â»â€¢i kÄ‚Â­ch thĂ†Â°Ă¡Â»â€ºc bÄ‚Â n cĂ¡Â»ï¿½
 					return;
 				}
 				continue;
@@ -637,12 +637,13 @@ public class MainFrame extends JFrame {
 					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
 				}
 			}
-		}else {
+		} else {
 			if (board.userX) {
-				if (winner == -1) {
-					aiScore++;;
+				if (winner == 1) {
+					aiScore++;
+					;
 					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				} else if (winner == 1) {
+				} else if (winner == -1) {
 					userScore++;
 					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
 				}
