@@ -30,7 +30,6 @@ public class Board {
 		nComputerWin = 0;
 		humanFirst = true;
 		userX = true;
-
 		nSteps = 0;
 		used = new boolean[maxN][maxN];
 		x = new int[maxN * maxN];
@@ -62,6 +61,7 @@ public class Board {
 		x[nSteps] = row;
 		y[nSteps] = col;
 		nSteps++;
+		
 		if (Board.humanFirst) {
 			if (nSteps % 2 != 0) {
 				table[row][col] = -1; // -1 là người
