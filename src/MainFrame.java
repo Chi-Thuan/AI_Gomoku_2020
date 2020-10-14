@@ -215,9 +215,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void clearScore() {
-		userScore = 0;
-		aiScore = 0;
-		txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+		board.resetScore();
+		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 
@@ -282,7 +281,6 @@ public class MainFrame extends JFrame {
 	public void play() {
 		clearBoard();
 		drawBoard();
-
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
@@ -302,18 +300,16 @@ public class MainFrame extends JFrame {
 						if ((mouseY > marginBoard) && (mouseY < marginBoard + boardSize)) {
 							int boardX = (mouseX - marginBoard) / lengthCell;
 							int boardY = (mouseY - marginBoard) / lengthCell;
-
-							if (board.isCanMove(boardY, boardX)) {
+							if (board.isCanMove(boardY, boardX) && !board.isGameOver) {
 								board.addMove(boardY, boardX);
-
-//								updateMove(true, boardX, boardY);
+								// updateMove(true, boardX, boardY);
 								//
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
 								// return;
 								// }
-
-								ai.move();
+								if (!board.isGameOver)
+									ai.move();
 								// if (ai.checkFinalState()) {
 								// // TODO xử lý end game
 								// return;
@@ -333,11 +329,13 @@ public class MainFrame extends JFrame {
 			}
 
 			if (name.equals("Surrender")) {
-				aiScore++;
-				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
-				play();
-				return;
+				if (board.isEmpty() == true) {
+					JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
+					board.setnComputerWin((short) (board.getnComputerWin() + 1));
+					txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+					play();
+					return;
+				}
 			}
 
 			if (name.equals("Undo")) {
@@ -350,7 +348,7 @@ public class MainFrame extends JFrame {
 			}
 
 			if (name.equals("Level")) {
-				// TODO chĂ¡Â»ï¿½n thuĂ¡ÂºÂ­t toÄ‚Â¡n cho AI sĂ¡Â»Â­ dĂ¡Â»Â¥ng, ...
+				// TODO chá»�n thuáº­t toĂ¡n cho AI sá»­ dá»¥ng, ...
 			}
 
 			if (name.equals("ColorX")) {
@@ -400,7 +398,7 @@ public class MainFrame extends JFrame {
 				if (getBoardSize(cbbBoardSize.getSelectedIndex()) != board.getN()) {
 					board.setN(getBoardSize(cbbBoardSize.getSelectedIndex()));
 					play();
-					// TODO khi Ă„â€˜Ă¡Â»â€¢i kÄ‚Â­ch thĂ†Â°Ă¡Â»â€ºc bÄ‚Â n cĂ¡Â»ï¿½
+					// TODO khi Ä‘á»•i kĂ­ch thÆ°á»›c bĂ n cá»�
 					return;
 				}
 				continue;
@@ -591,75 +589,36 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	public static final String X_WIN = "X Win";
-	public static final String O_WIN = "O Win";
-	public static final String DRAW = "DRAW";
+	public static final String X_WIN = "X Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String O_WIN = "O Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String DRAW = "DRAW\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String SURRENDER = "SURRENDER!!!";
+	private int option;
 
 	public void showDialogEndGame(int winner) {
 		if (board.userX) {
 			if (winner == -1) // white == true => Black wins
-				JOptionPane.showMessageDialog(null, X_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == 1)
-				JOptionPane.showMessageDialog(null, O_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				JOptionPane.showMessageDialog(null, DRAW);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		} else {
 			if (winner == 1) // white == true => Black wins
-				JOptionPane.showMessageDialog(null, X_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == -1)
-				JOptionPane.showMessageDialog(null, O_WIN);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				JOptionPane.showMessageDialog(null, DRAW);
+				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		}
-		play();
+
+		if (option == JOptionPane.YES_OPTION)
+			play();
 	}
 
 	public void getScore(int winner) {
-		if (board.isHumanFirst() == true) {
-			if (board.userX) {
-				if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				} else if (winner == 1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-
-			} else {
-
-				if (winner == 1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-
-				} else if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-			}
-		} else {
-			if (board.userX) {
-				if (winner == 1) {
-					aiScore++;
-					;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				} else if (winner == -1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-
-			} else {
-
-				if (winner == 1) {
-					userScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-
-				} else if (winner == -1) {
-					aiScore++;
-					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
-				}
-			}
-		}
+		board.score(winner);
+		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 

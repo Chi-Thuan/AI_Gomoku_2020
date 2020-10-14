@@ -102,82 +102,156 @@ public class Board {
 	}
 
 	// Hàm kiểm tra thắng thua
-	public boolean checkFinalState(int row, int col, int value) {
+	public void checkFinalState(int row, int col, int value) {
+
+		int tempRow = row;
+		int tempCol = col;
 
 		// check row
 		int checkRow = 0;
-		int col1 = col;
+
 		while (col - 1 >= 0 && table[row][col - 1] == value) {
 			checkRow++;
 			col--;
 		}
-		col = col1;
+		col = tempCol;
 		while (col + 1 <= getN() - 1 && table[row][col + 1] == value) {
 			checkRow++;
 			col++;
 		}
-
-		if (checkRow >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkRow >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
 
 		// check column
+		col = tempCol;
 		int checkCol = 0;
-		int row1 = row;
 		while (row - 1 >= 0 && table[row - 1][col] == value) {
 			checkCol++;
 			row--;
 		}
-		row = row1;
+		row = tempRow;
 		while (row + 1 <= getN() - 1 && table[row + 1][col] == value) {
 			checkCol++;
 			row++;
 		}
 
-		if (checkCol >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkCol >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
 
 		// checkDiagonalFromTopLeft
 		int checkDiagonalFromTopLeft = 0;
-		row = row1;
-		col = col1;
+		row = tempRow;
+		col = tempCol;
 		while (row - 1 >= 0 && col - 1 >= 0 && table[row - 1][col - 1] == value) {
 			checkDiagonalFromTopLeft++;
 			row--;
 			col--;
 		}
-		row = row1;
-		col = col1;
+		row = tempRow;
+		col = tempCol;
 		while (row + 1 <= getN() - 1 && col + 1 <= getN() - 1 && table[row + 1][col + 1] == value) {
 			checkDiagonalFromTopLeft++;
 			row++;
 			col++;
 		}
 
-		if (checkDiagonalFromTopLeft >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkDiagonalFromTopLeft >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
+		}
 
 		// checkDiagonalFromTopRight
 		int checkDiagonalFromTopRight = 0;
-		row = row1;
-		col = col1;
+		row = tempRow;
+		col = tempCol;
 		while (row - 1 >= 0 && col + 1 <= getN() - 1 && table[row - 1][col + 1] == value) {
 			checkDiagonalFromTopRight++;
 			row--;
 			col++;
 		}
-		row = row1;
-		col = col1;
+		row = tempRow;
+		col = tempCol;
 		while (row + 1 <= getN() - 1 && col - 1 >= 0 && table[row + 1][col - 1] == value) {
 			checkDiagonalFromTopRight++;
 			row++;
 			col--;
 		}
 
-		if (checkDiagonalFromTopRight >= getLengthWin() - 1)
-			return isGameOver = true;
+		if (checkDiagonalFromTopRight >= getLengthWin() - 1) {
+			isGameOver = true;
+			return;
 
-		return false;
+		}
 	}
+
+	// Hàm kiểm tra table có trống hay không
+	public boolean isEmpty() {
+		boolean check = false;
+		for (int[] arr : table)
+			for (int i = 0; i < n; i++)
+				if (arr[i] != 0) {
+					check = true;
+				} 
+
+		return check;
+	}
+
+	// Xóa điểm
+	public void resetScore() {
+		nUserWin = 0;
+		nComputerWin = 0;
+	}
+
+	// Hàm tính điểm
+	public void score(int winner) {
+		if (isHumanFirst() == true) {
+			if (userX) {
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+
+			} else {
+
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+			}
+		} else {
+			if (userX) {
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+
+			} else {
+
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+			}
+		}
+
+	}
+
 	// getters & setters
 
 	public byte getN() {
@@ -292,20 +366,17 @@ public class Board {
 
 		for (int x = 0; x < getN(); x++) {
 			for (int y = 0; y < getN(); y++) {
-
 				if (table[x][y] == 0) {
 					sb.append("-");
 				} else {
 					sb.append(table[x][y]);
 				}
 				sb.append(" ");
-
 			}
 			if (x != getN() - 1) {
 				sb.append("\n");
 			}
 		}
-
 		return new String(sb);
 	}
 }
