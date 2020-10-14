@@ -106,7 +106,7 @@ public class Board {
 
 		int tempRow = row;
 		int tempCol = col;
-
+		
 		// check row
 		int checkRow = 0;
 
@@ -123,7 +123,8 @@ public class Board {
 			isGameOver = true;
 			return;
 		}
-
+		
+			
 		// check column
 		col = tempCol;
 		int checkCol = 0;
@@ -141,7 +142,8 @@ public class Board {
 			isGameOver = true;
 			return;
 		}
-
+		
+		
 		// checkDiagonalFromTopLeft
 		int checkDiagonalFromTopLeft = 0;
 		row = tempRow;
@@ -164,6 +166,7 @@ public class Board {
 			return;
 		}
 
+		
 		// checkDiagonalFromTopRight
 		int checkDiagonalFromTopRight = 0;
 		row = tempRow;
@@ -376,7 +379,7 @@ public class Board {
 			if (x != getN() - 1) {
 				sb.append("\n");
 			}
-		}
+		}           
 		return new String(sb);
 	}
 }

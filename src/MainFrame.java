@@ -215,8 +215,9 @@ public class MainFrame extends JFrame {
 	}
 
 	public void clearScore() {
-		board.resetScore();
-		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+		userScore = 0;
+		aiScore = 0;
+		txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
 
 	}
 
@@ -324,6 +325,14 @@ public class MainFrame extends JFrame {
 			if (name.equals("NewGame")) {
 
 				clearScore();
+				play();
+				return;
+			}
+
+			if (name.equals("Surrender")) {
+				aiScore++;
+				txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
 				play();
 				return;
 			}
@@ -617,8 +626,50 @@ public class MainFrame extends JFrame {
 	}
 
 	public void getScore(int winner) {
-		board.score(winner);
-		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+		if (board.isHumanFirst() == true) {
+			if (board.userX) {
+				if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+			}
+		} else {
+			if (board.userX) {
+				if (winner == -1) {
+					aiScore++;
+					;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				} else if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+
+			} else {
+
+				if (winner == 1) {
+					userScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+
+				} else if (winner == -1) {
+					aiScore++;
+					txtScoreText.setText("User " + userScore + " : " + aiScore + " Computer");
+				}
+			}
+		}
 
 	}
 
