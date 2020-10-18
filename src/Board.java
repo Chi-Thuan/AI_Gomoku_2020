@@ -19,10 +19,10 @@ public class Board {
 	public static int[][] table; // Lưu các nước đi
 	public static boolean isGameOver;
 
-	static MainFrame mainFrame;
+	private static MainFrame mainFrame;
 
 	public Board(MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
+		Board.mainFrame = mainFrame;
 		n = defaultN = 20;
 		maxN = 30;
 		lengthWin = 5;
@@ -80,7 +80,11 @@ public class Board {
 
 		checkFinalState(row, col, table[row][col]);
 		if (isGameOver) {
-			mainFrame.getScore(getTurn());
+			if (getTurn() == -1)
+				nUserWin++;
+			else
+				nComputerWin++;
+			mainFrame.updateScore();
 			mainFrame.showDialogEndGame(getTurn());
 
 		} else {
@@ -190,14 +194,11 @@ public class Board {
 
 	// Hàm kiểm tra table có trống hay không
 	public boolean isEmpty() {
-		boolean check = false;
 		for (int[] arr : table)
 			for (int i = 0; i < n; i++)
-				if (arr[i] != 0) {
-					check = true;
-				} 
-
-		return check;
+				if (arr[i] != 0)
+					return false;
+		return true;
 	}
 
 	// Xóa điểm
@@ -206,51 +207,6 @@ public class Board {
 		nComputerWin = 0;
 	}
 
-	// Hàm tính điểm
-	public void score(int winner) {
-		if (isHumanFirst() == true) {
-			if (userX) {
-				if (winner == -1) {
-					nUserWin++;
-
-				} else if (winner == 1) {
-					nComputerWin++;
-
-				}
-
-			} else {
-
-				if (winner == 1) {
-					nComputerWin++;
-
-				} else if (winner == -1) {
-					nUserWin++;
-
-				}
-			}
-		} else {
-			if (userX) {
-				if (winner == 1) {
-					nComputerWin++;
-
-				} else if (winner == -1) {
-					nUserWin++;
-
-				}
-
-			} else {
-
-				if (winner == -1) {
-					nUserWin++;
-
-				} else if (winner == 1) {
-					nComputerWin++;
-
-				}
-			}
-		}
-
-	}
 
 	// getters & setters
 
@@ -346,6 +302,7 @@ public class Board {
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];
 	}
+	
 
 	public Board getDeepCopy() {
 		Board board = new Board(null);
@@ -359,6 +316,7 @@ public class Board {
 		board.lengthWin = this.lengthWin;
 		return board;
 	}
+	
 
 	@Override
 	public String toString() {

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.EventObject;
 
 import javax.swing.DefaultListCellRenderer;
@@ -30,6 +31,7 @@ public class MainFrame extends JFrame {
 	private JComboBox<String> cbbLevel;
 	private JLabel lblColorX;
 	private JLabel lblColorO;
+	private JLabel lblState;
 	private JComboBox<String> cbbColorX;
 	private JComboBox<String> cbbColorO;
 	private JComboBox<String> cbbWhoFirst;
@@ -53,8 +55,6 @@ public class MainFrame extends JFrame {
 	private int height;
 	private short widthButton;
 	private short heightButton;
-	private int userScore;
-	private int aiScore;
 
 	private Color defaultColorX;
 	private Color defaultColorO;
@@ -107,7 +107,13 @@ public class MainFrame extends JFrame {
 		int marginButton = 50;
 		short scoreTextWidth = 250;
 		int textPositionX = widthCanvas + (widthPanel - scoreTextWidth) / 2;
-		panel.add(txtScoreText = new JTextField("User " + userScore + " : " + aiScore + " Computer"));
+
+		panel.add(lblState = new JLabel("TURN OF USER"));
+		lblState.setFont(new Font(lblState.getFont().getName(), Font.BOLD, 16));
+		lblState.setHorizontalAlignment(JLabel.CENTER);
+		lblState.setBounds(textPositionX, marginButton - 40, scoreTextWidth, heightButton);
+
+		panel.add(txtScoreText = new JTextField("User " + 0 + " : " + 0 + " Computer"));
 		txtScoreText.setEditable(false);
 		txtScoreText.setFocusable(false);
 		txtScoreText.setHorizontalAlignment(JTextField.CENTER);
@@ -118,13 +124,13 @@ public class MainFrame extends JFrame {
 		btnNewGame.setFocusPainted(false);
 		btnNewGame.setBounds(buttonPositionX, 2 * marginButton, widthButton, heightButton);
 
-		panel.add(btnSurrender = new JButton("Surrender"));
-		btnSurrender.setFocusPainted(false);
-		btnSurrender.setBounds(buttonPositionX, 3 * marginButton, widthButton, heightButton);
-
 		panel.add(btnUndo = new JButton("Undo"));
 		btnUndo.setFocusPainted(false);
-		btnUndo.setBounds(buttonPositionX, 4 * marginButton, widthButton, heightButton);
+		btnUndo.setBounds(buttonPositionX, 3 * marginButton, widthButton, heightButton);
+
+		panel.add(btnSurrender = new JButton("Surrender"));
+		btnSurrender.setFocusPainted(false);
+		btnSurrender.setBounds(buttonPositionX, 4 * marginButton, widthButton, heightButton);
 
 		int labelPositionX = widthCanvas + marginButton;
 		JLabel lblBoardSize = new JLabel("Board size:");
@@ -214,12 +220,15 @@ public class MainFrame extends JFrame {
 		canvas.setBackground(panel.getBackground());
 	}
 
+<<<<<<< Updated upstream
 	public void clearScore() {
 		board.resetScore();
 		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 
+=======
+>>>>>>> Stashed changes
 	public short getLengthCell() {
 		return lengthCell = (short) (boardSize / board.getN());
 	}
@@ -278,43 +287,58 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+	public void updateScore() {
+		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+	}
+
+	public void setStateText(String turn) {
+		switch (turn) {
+		case "User":
+			lblState.setText("TURN OF USER");
+			break;
+		case "Computer":
+			lblState.setText("TURN OF COMPUTER");
+			break;
+		case "Over":
+			lblState.setText("GAME OVER");
+			break;
+		}
+	}
+
 	public void play() {
 		clearBoard();
 		drawBoard();
 		board.clearData();
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
+			setStateText("Computer");
 			ai.move();
+			setStateText("User");
 			// TODO code xử lý trong method move() cho AI
 			// có thể thêm nhiều tham số cho method này, tạm thời để vậy
-		}
+		} else
+			setStateText("User");
 		EventObject anEvent;
 		while (true) {
 
 			anEvent = events.waitEvent();
 			if (events.isMouseEvent(anEvent))
-				if (events.isMousePressed(anEvent)) {
+				if (events.isMousePressed(anEvent) && !Board.isGameOver) {
 					int mouseX = events.getMouseX(anEvent);
 					int mouseY = events.getMouseY(anEvent);
 					if ((mouseX > marginBoard) && (mouseX < marginBoard + boardSize))
 						if ((mouseY > marginBoard) && (mouseY < marginBoard + boardSize)) {
 							int boardX = (mouseX - marginBoard) / lengthCell;
 							int boardY = (mouseY - marginBoard) / lengthCell;
-							if (board.isCanMove(boardY, boardX) && !board.isGameOver) {
+							if (board.isCanMove(boardY, boardX)) {
 								board.addMove(boardY, boardX);
-								// updateMove(true, boardX, boardY);
-								//
-								// if (ai.checkFinalState()) {
-								// // TODO xử lý end game
-								// return;
-								// }
-								if (!board.isGameOver)
-									ai.move();
-								// if (ai.checkFinalState()) {
-								// // TODO xử lý end game
-								// return;
-								// }
 
+								if (!Board.isGameOver) {
+									setStateText("Computer");
+									ai.move();
+									setStateText("User");
+								} else
+									setStateText("Over");
 							}
 						}
 				}
@@ -322,33 +346,38 @@ public class MainFrame extends JFrame {
 			String name = events.getName(anEvent);
 
 			if (name.equals("NewGame")) {
-
-				clearScore();
+//				clearScore();
 				play();
 				return;
 			}
 
+<<<<<<< Updated upstream
 			if (name.equals("Surrender")) {
 				if (board.isEmpty() == true) {
+=======
+			if (name.equals("Surrender"))
+				if (!Board.isGameOver && !board.isEmpty()) {
+>>>>>>> Stashed changes
 					JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
 					board.setnComputerWin((short) (board.getnComputerWin() + 1));
-					txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+					updateScore();
 					play();
 					return;
 				}
-			}
 
-			if (name.equals("Undo")) {
-				undoMove();
-				continue;
-			}
+			if (name.equals("Undo"))
+				if (!Board.isGameOver) {
+					undoMove();
+					continue;
+				}
+
 			if (name.equals("About")) {
 				JOptionPane.showMessageDialog(this, ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
 				continue;
 			}
 
 			if (name.equals("Level")) {
-				// TODO chá»�n thuáº­t toĂ¡n cho AI sá»­ dá»¥ng, ...
+				// TODO chọn thuật toán cho AI
 			}
 
 			if (name.equals("ColorX")) {
@@ -361,25 +390,18 @@ public class MainFrame extends JFrame {
 				continue;
 			}
 
-			if (name.equals("whoFirst")) {
+			if (name.equals("whoFirst"))
 				if (cbbWhoFirst.getSelectedIndex() == 0) {
 					if (!Board.humanFirst) {
 						board.setHumanFirst(true);
-
 						play();
-						// TODO xử lý khi đang là máy chơi trước,
-						// bây giờ user chọn thành người chơi trước
 						return;
 					}
 				} else if (Board.humanFirst) {
 					board.setHumanFirst(false);
 					play();
-					// TODO xử lý khi đang là người chơi trước,
-					// bây giờ user chọn thành máy chơi trước
 					return;
-
 				}
-			}
 
 			if (name.equals("Represent")) {
 				if (cbbRepresent.getSelectedIndex() == 0) {
@@ -398,15 +420,12 @@ public class MainFrame extends JFrame {
 				if (getBoardSize(cbbBoardSize.getSelectedIndex()) != board.getN()) {
 					board.setN(getBoardSize(cbbBoardSize.getSelectedIndex()));
 					play();
-					// TODO khi Ä‘á»•i kĂ­ch thÆ°á»›c bĂ n cá»�
 					return;
 				}
 				continue;
 			}
-			unfocusAllCombobox();
-
+			unfocusAll();
 		}
-
 	}
 
 	public byte getBoardSize(int index) {
@@ -553,7 +572,11 @@ public class MainFrame extends JFrame {
 		canvas.fillRect(x1 + 1, y1 + 1, length, length);
 	}
 
-	public void unfocusAllCombobox() {
+	public void unfocusAll() {
+		btnNewGame.setFocusable(false);
+		btnUndo.setFocusable(false);
+		btnSurrender.setFocusable(false);
+		btnAbout.setFocusable(false);
 		cbbBoardSize.setFocusable(false);
 		cbbLevel.setFocusable(false);
 		cbbWhoFirst.setFocusable(false);
@@ -589,13 +612,19 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+<<<<<<< Updated upstream
 	public static final String X_WIN = "X Win\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String O_WIN = "O Win\n DO YOU WANT TO PLAY NEWGAME ?";
+=======
+	public static final String USER_WIN = "User Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String BOT_WIN = "Computer Win\n DO YOU WANT TO PLAY NEWGAME ?";
+>>>>>>> Stashed changes
 	public static final String DRAW = "DRAW\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String SURRENDER = "SURRENDER!!!";
 	private int option;
 
 	public void showDialogEndGame(int winner) {
+<<<<<<< Updated upstream
 		if (board.userX) {
 			if (winner == -1) // white == true => Black wins
 				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
@@ -611,15 +640,26 @@ public class MainFrame extends JFrame {
 			else
 				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		}
+=======
+		if (winner == -1)
+			option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+		else if (winner == 1)
+			option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+		else
+			option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+>>>>>>> Stashed changes
 
 		if (option == JOptionPane.YES_OPTION)
 			play();
 	}
 
+<<<<<<< Updated upstream
 	public void getScore(int winner) {
 		board.score(winner);
 		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
 
 	}
 
+=======
+>>>>>>> Stashed changes
 }
