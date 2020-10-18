@@ -220,15 +220,6 @@ public class MainFrame extends JFrame {
 		canvas.setBackground(panel.getBackground());
 	}
 
-<<<<<<< Updated upstream
-	public void clearScore() {
-		board.resetScore();
-		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
-
-	}
-
-=======
->>>>>>> Stashed changes
 	public short getLengthCell() {
 		return lengthCell = (short) (boardSize / board.getN());
 	}
@@ -351,13 +342,8 @@ public class MainFrame extends JFrame {
 				return;
 			}
 
-<<<<<<< Updated upstream
-			if (name.equals("Surrender")) {
-				if (board.isEmpty() == true) {
-=======
 			if (name.equals("Surrender"))
 				if (!Board.isGameOver && !board.isEmpty()) {
->>>>>>> Stashed changes
 					JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
 					board.setnComputerWin((short) (board.getnComputerWin() + 1));
 					updateScore();
@@ -612,54 +598,21 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-<<<<<<< Updated upstream
-	public static final String X_WIN = "X Win\n DO YOU WANT TO PLAY NEWGAME ?";
-	public static final String O_WIN = "O Win\n DO YOU WANT TO PLAY NEWGAME ?";
-=======
 	public static final String USER_WIN = "User Win\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String BOT_WIN = "Computer Win\n DO YOU WANT TO PLAY NEWGAME ?";
->>>>>>> Stashed changes
 	public static final String DRAW = "DRAW\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String SURRENDER = "SURRENDER!!!";
 	private int option;
 
 	public void showDialogEndGame(int winner) {
-<<<<<<< Updated upstream
-		if (board.userX) {
-			if (winner == -1) // white == true => Black wins
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else if (winner == 1)
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-		} else {
-			if (winner == 1) // white == true => Black wins
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else if (winner == -1)
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-		}
-=======
 		if (winner == -1)
 			option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		else if (winner == 1)
 			option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		else
 			option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
->>>>>>> Stashed changes
 
 		if (option == JOptionPane.YES_OPTION)
 			play();
 	}
-
-<<<<<<< Updated upstream
-	public void getScore(int winner) {
-		board.score(winner);
-		txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
-
-	}
-
-=======
->>>>>>> Stashed changes
 }
