@@ -17,6 +17,14 @@ public class AI {
 	}
 
 	public void move() {
+		try {
+			Thread.sleep(250);
+			// do random nên Máy đi quá nhanh
+			// cho delay 0.25s để giả sử trong lúc algorithm đang chạy
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		// test thử cho AI random, sau này edit ráp thuật toán vào
 		if (Board.nSteps == 0) {
 			int boardX = randomInt(board.getN());
