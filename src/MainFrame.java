@@ -605,21 +605,12 @@ public class MainFrame extends JFrame {
 	private int option;
 
 	public void showDialogEndGame(int winner) {
-		if (board.userX) {
-			if (winner == -1) // white == true => Black wins
+			if (winner == -1)
 				option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == 1)
 				option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
 				option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-		} else {
-			if (winner == 1) // white == true => Black wins
-				option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else if (winner == -1)
-				option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-			else
-				option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
-		}
 
 		if (option == JOptionPane.YES_OPTION)
 			play();
