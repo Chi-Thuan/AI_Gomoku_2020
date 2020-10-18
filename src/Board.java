@@ -190,6 +190,71 @@ public class Board {
 
 		}
 	}
+
+	// Hàm kiểm tra table có trống hay không
+	public boolean isEmpty() {
+		boolean check = false;
+		for (int[] arr : table)
+			for (int i = 0; i < n; i++)
+				if (arr[i] != 0) {
+					check = true;
+				} 
+
+		return check;
+	}
+
+	// Xóa điểm
+	public void resetScore() {
+		nUserWin = 0;
+		nComputerWin = 0;
+	}
+
+	// Hàm tính điểm
+	public void score(int winner) {
+		if (isHumanFirst() == true) {
+			if (userX) {
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+
+			} else {
+
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+			}
+		} else {
+			if (userX) {
+				if (winner == 1) {
+					nComputerWin++;
+
+				} else if (winner == -1) {
+					nUserWin++;
+
+				}
+
+			} else {
+
+				if (winner == -1) {
+					nUserWin++;
+
+				} else if (winner == 1) {
+					nComputerWin++;
+
+				}
+			}
+		}
+
+	}
+
 	// getters & setters
 
 	public byte getN() {

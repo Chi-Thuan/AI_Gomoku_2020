@@ -337,6 +337,16 @@ public class MainFrame extends JFrame {
 				return;
 			}
 
+			if (name.equals("Surrender")) {
+				if (board.isEmpty() == true) {
+					JOptionPane.showMessageDialog(this, SURRENDER, "Surrender", JOptionPane.INFORMATION_MESSAGE);
+					board.setnComputerWin((short) (board.getnComputerWin() + 1));
+					txtScoreText.setText("User " + board.getnUserWin() + " : " + board.getnComputerWin() + " Computer");
+					play();
+					return;
+				}
+			}
+
 			if (name.equals("Undo")) {
 				undoMove();
 				continue;
@@ -588,8 +598,8 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	public static final String X_WIN = "X Win\n DO YOU WANT TO PLAY NEWGAME ?";
-	public static final String O_WIN = "O Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String USER_WIN = "User Win\n DO YOU WANT TO PLAY NEWGAME ?";
+	public static final String BOT_WIN = "Bot Win\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String DRAW = "DRAW\n DO YOU WANT TO PLAY NEWGAME ?";
 	public static final String SURRENDER = "SURRENDER!!!";
 	private int option;
@@ -597,18 +607,18 @@ public class MainFrame extends JFrame {
 	public void showDialogEndGame(int winner) {
 		if (board.userX) {
 			if (winner == -1) // white == true => Black wins
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == 1)
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		} else {
 			if (winner == 1) // white == true => Black wins
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, BOT_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else if (winner == -1)
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, USER_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 			else
-				option = JOptionPane.showConfirmDialog(null, X_WIN, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
+				option = JOptionPane.showConfirmDialog(null, DRAW, "GAME OVER!!!", JOptionPane.YES_NO_OPTION);
 		}
 
 		if (option == JOptionPane.YES_OPTION)
