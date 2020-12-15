@@ -1,4 +1,7 @@
+package model;
 import java.util.Random;
+
+import view.MainFrame;
 
 public class AI {
 	private Random generator = new Random();

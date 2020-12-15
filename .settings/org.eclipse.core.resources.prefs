@@ -1,4 +1,4 @@
 eclipse.preferences.version=1
-encoding//src/Board.java=UTF-8
-encoding//src/MainFrame.java=UTF-8
+encoding//src/model/Board.java=UTF-8
+encoding//src/view/MainFrame.java=UTF-8
 encoding/<project>=UTF-8

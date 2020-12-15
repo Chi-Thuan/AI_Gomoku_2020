@@ -1,3 +1,4 @@
+package view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -16,6 +17,9 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import model.AI;
+import model.Board;
 
 @SuppressWarnings(value = { "serial", "unused", "rawtypes", "unchecked" })
 public class MainFrame extends JFrame {

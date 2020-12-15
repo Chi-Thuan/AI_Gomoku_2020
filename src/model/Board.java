@@ -1,4 +1,7 @@
+package model;
 import java.util.HashSet;
+
+import view.MainFrame;
 
 @SuppressWarnings("unused")
 public class Board {
