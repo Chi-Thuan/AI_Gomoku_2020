@@ -1,4 +1,5 @@
 package view;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -145,7 +146,7 @@ public class MainFrame extends JFrame {
 		panel.add(cbbBoardSize = new JComboBox<>(boardSizeData));
 		cbbBoardSize.setBounds(labelPositionX + widthButton, 5 * marginButton, widthCombobox, heightButton);
 
-		JLabel lblLevel = new JLabel("Level:");
+		JLabel lblLevel = new JLabel("Algorithms:");
 		panel.add(lblLevel);
 		lblLevel.setBounds(labelPositionX, 6 * marginButton, widthButton, heightButton);
 
@@ -331,7 +332,10 @@ public class MainFrame extends JFrame {
 								if (!Board.isGameOver) {
 									setStateText("Computer");
 									ai.move();
-									setStateText("User");
+									if (!Board.isGameOver)
+										setStateText("User");
+									else
+										setStateText("Over");
 								} else
 									setStateText("Over");
 							}
