@@ -18,7 +18,7 @@ public class Node {
 	public Node() { // deep copy table
 		rowMove = -1;
 		colMove = -1;
-		matrix = cloneMatrix(Board.table);
+		matrix = cloneMatrix(Board.table, Board.n);
 	}
 
 	public Node(Node parent, int rowMove, int colMove, int val) {
@@ -36,9 +36,16 @@ public class Node {
 		return re;
 	}
 
+	public int[][] cloneMatrix(int[][] src, int len) { // square matrix
+		int[][] re = new int[len][];
+		for (int i = 0; i < len; i++)
+			re[i] = Arrays.copyOf(src[i], len);
+		return re;
+	}
+
 	public List<Node> getChildren(int val) {
 		// val -1 là Người, 1 là AI
-		int len = Board.n;
+		int len = matrix.length;
 		for (int row = 0; row < len; row++)
 			for (int col = 0; col < len; col++)
 				if (matrix[row][col] != 0) {
