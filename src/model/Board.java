@@ -1,4 +1,5 @@
 package model;
+
 import java.util.HashSet;
 
 import view.MainFrame;
@@ -6,7 +7,7 @@ import view.MainFrame;
 @SuppressWarnings("unused")
 public class Board {
 
-	private byte n; // Kích thước hiện tại của bàn cờ
+	public static byte n; // Kích thước hiện tại của bàn cờ
 	private byte maxN; // Kích thước tối đa của bàn cờ
 	private byte defaultN; // Kích thước mặc định của bàn cờ
 	private byte lengthWin; // Kích thước win : 5 hoặc bé hơn 5, tùy vào kích thước bàn cờ
@@ -16,7 +17,7 @@ public class Board {
 	public static boolean userX; // Người chơi là quân X
 
 	public static short nSteps; // số nước đi
-	private boolean[][] used; // Đánh dấu đã đánh hay chưa
+	public static boolean[][] used; // Đánh dấu đã đánh hay chưa
 	public static int[] x; // Lưu phần row của các nước đi
 	public static int[] y; // Lưu phần column của các nước đi
 	public static int[][] table; // Lưu các nước đi
@@ -56,8 +57,8 @@ public class Board {
 
 	}
 
-	public boolean isCanMove(int row, int col) {
-		return !used[row][col];
+	public static boolean isCanMove(int row, int col) {
+		return row >= 0 && col >= 0 && row < n && col < n && !used[row][col];
 	}
 
 	public void addMove(int row, int col) {
@@ -87,6 +88,7 @@ public class Board {
 				nUserWin++;
 			else
 				nComputerWin++;
+
 			mainFrame.updateScore();
 			mainFrame.showDialogEndGame(getTurn());
 
@@ -110,7 +112,6 @@ public class Board {
 
 	// Hàm kiểm tra thắng thua
 	public void checkFinalState(int row, int col, int value) {
-
 		int tempRow = row;
 		int tempCol = col;
 
@@ -210,7 +211,6 @@ public class Board {
 		nComputerWin = 0;
 	}
 
-
 	// getters & setters
 
 	public byte getN() {
@@ -218,8 +218,8 @@ public class Board {
 	}
 
 	public void setN(byte n) {
-		this.n = n;
-		getLengthWin();
+		Board.n = n;
+		setLengthWin((byte) Math.min(5, Board.n));
 	}
 
 	public byte getDefaultN() {
@@ -231,7 +231,7 @@ public class Board {
 	}
 
 	public byte getLengthWin() {
-		return (byte) Math.min(5, n);
+		return lengthWin;
 	}
 
 	public void setLengthWin(byte lengthWin) {
@@ -283,7 +283,7 @@ public class Board {
 	}
 
 	public void setUsed(boolean[][] used) {
-		this.used = used;
+		Board.used = used;
 	}
 
 	public int[] getX() {
@@ -305,21 +305,6 @@ public class Board {
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];
 	}
-	
-
-	public Board getDeepCopy() {
-		Board board = new Board(null);
-
-		for (int i = 0; i < board.getN(); i++) {
-			board.table[i] = this.table[i].clone();
-		}
-
-		board.nSteps = this.nSteps;
-		board.isGameOver = this.isGameOver;
-		board.lengthWin = this.lengthWin;
-		return board;
-	}
-	
 
 	@Override
 	public String toString() {

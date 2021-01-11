@@ -1,2 +1,0 @@
-fix bug :
-_ Tính năng thông báo người chiến thắng. Có thể sử dụng khi xài "play as O"

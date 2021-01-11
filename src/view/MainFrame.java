@@ -19,7 +19,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import model.AI;
+import ai.AI;
 import model.Board;
 
 @SuppressWarnings(value = { "serial", "unused", "rawtypes", "unchecked" })
@@ -34,6 +34,7 @@ public class MainFrame extends JFrame {
 	private JButton btnAbout;
 	private JButton btnSurrender;
 	private JComboBox<String> cbbLevel;
+	private int algo = 0;
 	private JLabel lblColorX;
 	private JLabel lblColorO;
 	private JLabel lblState;
@@ -85,7 +86,7 @@ public class MainFrame extends JFrame {
 		colorO = defaultColorO = Color.GREEN;
 		colorBoard = defaultColorBoard = Color.GRAY;
 		board = new Board(this);
-		ai = new AI(board, this);
+		ai = new AI(board);
 		initGUI();
 		initEventListener();
 		getLengthCell();
@@ -308,7 +309,7 @@ public class MainFrame extends JFrame {
 
 		if (!board.isHumanFirst()) { // nếu là máy chơi trước
 			setStateText("Computer");
-			ai.move();
+			ai.moveFirst();
 			setStateText("User");
 			// TODO code xử lý trong method move() cho AI
 			// có thể thêm nhiều tham số cho method này, tạm thời để vậy
@@ -326,16 +327,14 @@ public class MainFrame extends JFrame {
 						if ((mouseY > marginBoard) && (mouseY < marginBoard + boardSize)) {
 							int boardX = (mouseX - marginBoard) / lengthCell;
 							int boardY = (mouseY - marginBoard) / lengthCell;
-							if (board.isCanMove(boardY, boardX)) {
+							if (Board.isCanMove(boardY, boardX)) {
 								board.addMove(boardY, boardX);
 
 								if (!Board.isGameOver) {
 									setStateText("Computer");
-									ai.move();
-									if (!Board.isGameOver)
-										setStateText("User");
-									else
-										setStateText("Over");
+									ai.move(algo);
+									setStateText((Board.isGameOver) ? "Over" : "User");
+
 								} else
 									setStateText("Over");
 							}
@@ -371,7 +370,7 @@ public class MainFrame extends JFrame {
 			}
 
 			if (name.equals("Level")) {
-				// TODO chọn thuật toán cho AI
+				algo = cbbLevel.getSelectedIndex();
 			}
 
 			if (name.equals("ColorX")) {
