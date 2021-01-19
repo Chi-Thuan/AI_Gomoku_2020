@@ -10,7 +10,6 @@ public class Board {
 	public static byte n; // Kích thước hiện tại của bàn cờ
 	private byte maxN; // Kích thước tối đa của bàn cờ
 	private byte defaultN; // Kích thước mặc định của bàn cờ
-	private byte lengthWin; // Kích thước win : 5 hoặc bé hơn 5, tùy vào kích thước bàn cờ
 	private short nUserWin; // Người chơi win
 	private short nComputerWin; // Máy win
 	public static boolean humanFirst; // Người đi trước
@@ -29,7 +28,6 @@ public class Board {
 		Board.mainFrame = mainFrame;
 		n = defaultN = 20;
 		maxN = 30;
-		lengthWin = 5;
 		nUserWin = 0;
 		nComputerWin = 0;
 		humanFirst = true;
@@ -53,8 +51,6 @@ public class Board {
 			for (int i = 0; i < n; i++)
 				arr[i] = 0;
 		isGameOver = false;
-		getLengthWin();
-
 	}
 
 	public static boolean isCanMove(int row, int col) {
@@ -126,7 +122,7 @@ public class Board {
 			checkRow++;
 			col++;
 		}
-		if (checkRow >= getLengthWin() - 1) {
+		if (checkRow >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -144,7 +140,7 @@ public class Board {
 			row++;
 		}
 
-		if (checkCol >= getLengthWin() - 1) {
+		if (checkCol >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -166,7 +162,7 @@ public class Board {
 			col++;
 		}
 
-		if (checkDiagonalFromTopLeft >= getLengthWin() - 1) {
+		if (checkDiagonalFromTopLeft >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -188,7 +184,7 @@ public class Board {
 			col--;
 		}
 
-		if (checkDiagonalFromTopRight >= getLengthWin() - 1) {
+		if (checkDiagonalFromTopRight >= 4) {
 			isGameOver = true;
 			return;
 
@@ -218,7 +214,6 @@ public class Board {
 
 	public void setN(byte n) {
 		Board.n = n;
-		setLengthWin((byte) Math.min(5, Board.n));
 	}
 
 	public byte getDefaultN() {
@@ -227,14 +222,6 @@ public class Board {
 
 	public void setDefaultN(byte defaultN) {
 		this.defaultN = defaultN;
-	}
-
-	public byte getLengthWin() {
-		return lengthWin;
-	}
-
-	public void setLengthWin(byte lengthWin) {
-		this.lengthWin = lengthWin;
 	}
 
 	public short getnUserWin() {

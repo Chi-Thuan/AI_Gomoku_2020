@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
 			"Light Gray", "Magenta", "Orange", "Pink", "Red", "White", "Yellow" };
 	private String[] whoFirstData = { "User plays first", "Computer plays first" };
 	private String[] representData = { "Plays as X", "Plays as O" };
-	private String[] boardSizeData = { "Default", "3 x 3", "5 x 5", "10 x 10", "15 x 15", "20 x 20", "25 x 25",
+	private String[] boardSizeData = { "Default", "5 x 5", "10 x 10", "15 x 15", "20 x 20", "25 x 25",
 			"30 x 30" };
 
 	public MainFrame() {
@@ -425,16 +425,14 @@ public class MainFrame extends JFrame {
 		if (index == 0)
 			return board.getDefaultN();
 		if (index == 1)
-			return 3;
-		if (index == 2)
 			return 5;
-		if (index == 3)
+		if (index == 2)
 			return 10;
-		if (index == 4)
+		if (index == 3)
 			return 15;
-		if (index == 5)
+		if (index == 4)
 			return 20;
-		if (index == 6)
+		if (index == 5)
 			return 25;
 		return 30;
 	}

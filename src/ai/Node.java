@@ -30,7 +30,7 @@ public class Node {
 		this.matrix = cloneMatrix(parent.matrix);
 		this.matrix[rowMove][colMove] = val;
 	}
-	
+
 	public boolean isTerminal() {
 		return used == matrix.length * matrix.length;
 	}
@@ -145,7 +145,7 @@ public class Node {
 	}
 
 	public boolean checkWin(int val) {
-		return checkWinInRow(val, (matrix.length == 3) ? 3 : 5);
+		return checkWinInRow(val, 5);
 	}
 
 	public boolean checkWinInRow(int val, int lenWin) {
@@ -202,7 +202,7 @@ public class Node {
 
 		if (count >= lenWin)
 			return true;
-		
+
 		return false;
 	}
 
