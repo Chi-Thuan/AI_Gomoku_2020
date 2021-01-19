@@ -103,9 +103,6 @@ public class Node {
 			for (int col = 0; col < matrix.length; col++) {
 				if (matrix[row][col] == val) {
 					live4 += getLiveFour(row, col, val);
-					if (live4 > 0)
-						return 1000000;
-
 					dead4 += getDeadFour1(row, col, val);
 					dead4 += getDeadFour2(row, col, val);
 					live3 += getLiveThree(row, col, val);
@@ -130,10 +127,14 @@ public class Node {
 				}
 			}
 
-		if (dead4 > 0 || dead4b > 0 || live3 > 1 || (live3 > 0 && dead3 > 0))
+		if (live4 > 0)
+			return 1000000;
+
+		if (dead4 > 1 || dead4b > 1 || live3 > 1 || (live3 > 0 && dead3 > 0) || (live3 > 0 && dead3b > 0))
 			return 450000;
 
-		int eval = live3 * 50000 + dead3 * 10000 + dead3b * 90 + live2 * 40 + dead2 * 10 + dead2b;
+		int eval = dead4 * 200000 + dead4b * 90000 + live3 * 40000 + dead3 * 10000 + dead3b * 90 + live2 * 40
+				+ dead2 * 10 + dead2b;
 
 		return eval;
 	}

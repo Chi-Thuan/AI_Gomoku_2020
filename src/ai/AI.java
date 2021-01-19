@@ -1,11 +1,8 @@
 package ai;
 
-import java.util.Random;
-
 import model.Board;
 
 public class AI {
-	private Random generator = new Random();
 	private Board board;
 	private ISearchAlgo miniMax;
 	private ISearchAlgo alphaBeta;
@@ -16,9 +13,6 @@ public class AI {
 		alphaBeta = new AlphaBeta();
 	}
 
-	public int randomInt(int n) {
-		return generator.nextInt(n);
-	}
 
 	public void moveFirst() {
 		int n = board.getN();

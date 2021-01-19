@@ -1,10 +1,7 @@
 package model;
 
-import java.util.HashSet;
-
 import view.MainFrame;
 
-@SuppressWarnings("unused")
 public class Board {
 
 	public static byte n; // Kích thước hiện tại của bàn cờ
