@@ -34,10 +34,10 @@ public class AI {
 		int[] arr = null;
 		switch (algo) {
 		case 0:
-			arr = miniMax.execute(new Node(), (Board.n <= 5) ? 1 : 3);
+			arr = miniMax.execute(new Node(), 3);
 			break;
 		case 1:
-			arr = alphaBeta.execute(new Node(), (Board.n <= 5) ? 1 : 3);
+			arr = alphaBeta.execute(new Node(), 3);
 			break;
 		}
 

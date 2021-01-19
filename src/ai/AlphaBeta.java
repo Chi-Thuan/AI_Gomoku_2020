@@ -12,7 +12,7 @@ public class AlphaBeta implements ISearchAlgo {
 	}
 
 	public int maxValue(Node node, int alpha, int beta, int depth) {
-		if (depth == 0)
+		if (depth == 0 || node.isTerminal())
 			return node.getValue();
 
 		int v = Integer.MIN_VALUE;
@@ -30,16 +30,16 @@ public class AlphaBeta implements ISearchAlgo {
 				node.setBestNextMove(child);
 				v = newV;
 			}
-			if (v >= beta) {
+			if (v >= beta) 
 				return v;
-			}
+			
 			alpha = Math.max(alpha, v);
 		}
 		return v;
 	}
 
 	public int minValue(Node node, int alpha, int beta, int depth) {
-		if (depth == 0)
+		if (depth == 0 || node.isTerminal())
 			return node.getValue();
 		int v = Integer.MAX_VALUE;
 		int newV = Integer.MAX_VALUE;
@@ -57,9 +57,9 @@ public class AlphaBeta implements ISearchAlgo {
 				node.setBestNextMove(child);
 				v = newV;
 			}
-			if (v <= alpha) {
+			if (v <= alpha) 
 				return v;
-			}
+			
 			beta = Math.min(beta, v);
 		}
 		return v;

@@ -12,6 +12,7 @@ public class Node {
 	private int rowMove;
 	private int colMove;
 	private int value;
+	private int used;
 	private List<Node> children = new ArrayList<Node>();
 	private Node bestNextMove;
 
@@ -19,13 +20,19 @@ public class Node {
 		rowMove = -1;
 		colMove = -1;
 		matrix = cloneMatrix(Board.table, Board.n);
+		used = Board.nSteps + 1;
 	}
 
 	public Node(Node parent, int rowMove, int colMove, int val) {
 		this.rowMove = rowMove;
 		this.colMove = colMove;
+		this.used = parent.used + 1;
 		this.matrix = cloneMatrix(parent.matrix);
 		this.matrix[rowMove][colMove] = val;
+	}
+	
+	public boolean isTerminal() {
+		return used == matrix.length * matrix.length;
 	}
 
 	public int[][] cloneMatrix(int[][] src) { // square matrix

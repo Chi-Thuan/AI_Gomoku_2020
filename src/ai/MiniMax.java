@@ -12,7 +12,7 @@ public class MiniMax implements ISearchAlgo {
 	}
 
 	public int maxValue(Node node, int depth) {
-		if (depth == 0)
+		if (depth == 0 || node.isTerminal())
 			return node.getValue();
 		int v = Integer.MIN_VALUE;
 		int newV = Integer.MIN_VALUE;
@@ -34,7 +34,7 @@ public class MiniMax implements ISearchAlgo {
 	}
 
 	public int minValue(Node node, int depth) {
-		if (depth == 0)
+		if (depth == 0 || node.isTerminal())
 			return node.getValue();
 		int v = Integer.MAX_VALUE;
 		int newV = Integer.MAX_VALUE;

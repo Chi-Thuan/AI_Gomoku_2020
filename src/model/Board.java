@@ -92,9 +92,9 @@ public class Board {
 			mainFrame.updateScore();
 			mainFrame.showDialogEndGame(getTurn());
 
-		} else {
-			if (nSteps == getN() * getN())
-				mainFrame.showDialogEndGame(0);
+		} else if (nSteps == n * n) {
+			mainFrame.showDialogEndGame(0);
+			isGameOver = true;
 		}
 	}
 
