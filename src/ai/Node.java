@@ -82,13 +82,18 @@ public class Node {
 	}
 
 	public int getEval(int val) {
-		int enemy = val * -1, fiveInRow, live4, dead4, dead4b, live3, dead3, dead3b, live2, dead2, dead2b;
-		fiveInRow = live4 = dead4 = dead4b = live3 = dead3 = dead3b = live2 = dead2 = dead2b = 0;
+		if (checkWin(val))
+			return Integer.MAX_VALUE;
+		int enemy = val * -1, live4, dead4, dead4b, live3, dead3, dead3b, live2, dead2, dead2b;
+		live4 = dead4 = dead4b = live3 = dead3 = dead3b = live2 = dead2 = dead2b = 0;
+
 		for (int row = 0; row < matrix.length; row++)
 			for (int col = 0; col < matrix.length; col++) {
 				if (matrix[row][col] == val) {
-					fiveInRow += getFiveInRow(row, col, val);
 					live4 += getLiveFour(row, col, val);
+					if (live4 > 0)
+						return 1000000;
+
 					dead4 += getDeadFour1(row, col, val);
 					dead4 += getDeadFour2(row, col, val);
 					live3 += getLiveThree(row, col, val);
@@ -111,21 +116,12 @@ public class Node {
 					dead2b += getDeadTwoBlock2(row, col, val, enemy);
 					dead2b += getDeadTwoBlock3(row, col, val, enemy);
 				}
-
 			}
 
-		if (fiveInRow >= 1)
-			return Integer.MAX_VALUE;
+		if (dead4 > 0 || dead4b > 0 || live3 > 0)
+			return 450000;
 
-		if (live4 >= 1)
-			return 1000000;
-
-		if (dead4 >= 1 || dead4b >= 1 || live3 >= 1 || dead3 >= 2 || (dead4 >= 1 && dead4b >= 1)
-				|| (dead4 >= 1 && live3 >= 1) || (dead4 >= 1 && dead3 >= 1) || (dead4b >= 1 && live3 >= 1)
-				|| (dead4b >= 1 && dead3 >= 1))
-			return 400000;
-
-		int eval = live3 * 500 + dead3 * 200 + dead3b * 90 + live2 * 40 + dead2 * 10 + dead2b;
+		int eval = dead3 * 10000 + dead3b * 90 + live2 * 40 + dead2 * 10 + dead2b;
 
 		return eval;
 	}
@@ -133,11 +129,48 @@ public class Node {
 	public int getValue() {
 		int a = getEval(1);
 		int b = getEval(-1);
-//		if (Board.humanFirst)
-//			b++;
-//		else
-//			a++;
 		return value = a - b;
+	}
+
+	public boolean checkWin(int val) {
+		int len = matrix.length;
+		for (int row = 0; row < len; row++)
+			for (int col = 0; col < len; col++)
+				if (matrix[row][col] == val)
+					if (((len == 3) ? getThreeInRow(row, col, val) : getFiveInRow(row, col, val)) > 0)
+						return true;
+		return false;
+	}
+
+	public int getThreeInRow(int row, int col, int val) {
+		// check 4 hướng
+		int re = 0;
+		// dòng
+		try {
+			if (matrix[row][col + 1] == val && matrix[row][col - 1] == val)
+				re++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+		// cột
+		try {
+			if (matrix[row + 1][col] == val && matrix[row - 1][col] == val)
+				re++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+		// chéo chính
+		try {
+			if (matrix[row - 1][col - 1] == val && matrix[row + 1][col + 1] == val)
+				re++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+		// chéo phụ
+		try {
+			if (matrix[row - 1][col + 1] == val && matrix[row + 1][col - 1] == val)
+				re++;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+
+		return re;
 	}
 
 	public int getFiveInRow(int row, int col, int val) {

@@ -20,6 +20,10 @@ public class MiniMax implements ISearchAlgo {
 		List<Node> childrens = node.getChildren(1);
 
 		for (Node child : childrens) {
+			if (child.checkWin(1)) {
+				node.setBestNextMove(child);
+				return child.getValue();
+			}
 			newV = minValue(child, depth - 1);
 			if (newV > v) {
 				node.setBestNextMove(child);
@@ -37,6 +41,10 @@ public class MiniMax implements ISearchAlgo {
 		// -1 là Người => generate các nước đi của Người
 		List<Node> childrens = node.getChildren(-1);
 		for (Node child : childrens) {
+			if (child.checkWin(-1)) {
+				node.setBestNextMove(child);
+				return child.getValue();
+			}
 			newV = maxValue(child, depth - 1);
 			if (newV < v) {
 				node.setBestNextMove(child);

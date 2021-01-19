@@ -2,7 +2,6 @@ package ai;
 
 import java.util.List;
 
-
 public class AlphaBeta implements ISearchAlgo {
 
 	@Override
@@ -22,6 +21,10 @@ public class AlphaBeta implements ISearchAlgo {
 		List<Node> childrens = node.getChildren(1);
 
 		for (Node child : childrens) {
+			if (child.checkWin(1)) {
+				node.setBestNextMove(child);
+				return child.getValue();
+			}
 			newV = minValue(child, alpha, beta, depth - 1);
 			if (newV > v) {
 				node.setBestNextMove(child);
@@ -44,6 +47,11 @@ public class AlphaBeta implements ISearchAlgo {
 		List<Node> childrens = node.getChildren(-1);
 
 		for (Node child : childrens) {
+			if (child.checkWin(-1)) {
+				node.setBestNextMove(child);
+				return child.getValue();
+			}
+			
 			newV = maxValue(child, alpha, beta, depth - 1);
 			if (newV < v) {
 				node.setBestNextMove(child);
