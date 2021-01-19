@@ -31,8 +31,13 @@ public class Node {
 	public int[][] cloneMatrix(int[][] src) { // square matrix
 		int len = src.length;
 		int[][] re = new int[len][];
-		for (int i = 0; i < len; i++)
-			re[i] = Arrays.copyOf(src[i], len);
+
+		try {
+			for (int i = 0; i < len; i++)
+				re[i] = Arrays.copyOf(src[i], len);
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+		}
 		return re;
 	}
 
@@ -118,10 +123,10 @@ public class Node {
 				}
 			}
 
-		if (dead4 > 0 || dead4b > 0 || live3 > 0)
+		if (dead4 > 0 || dead4b > 0 || live3 > 1 || (live3 > 0 && dead3 > 0))
 			return 450000;
 
-		int eval = dead3 * 10000 + dead3b * 90 + live2 * 40 + dead2 * 10 + dead2b;
+		int eval = live3 * 50000 + dead3 * 10000 + dead3b * 90 + live2 * 40 + dead2 * 10 + dead2b;
 
 		return eval;
 	}
@@ -133,79 +138,65 @@ public class Node {
 	}
 
 	public boolean checkWin(int val) {
-		int len = matrix.length;
-		for (int row = 0; row < len; row++)
-			for (int col = 0; col < len; col++)
-				if (matrix[row][col] == val)
-					if (((len == 3) ? getThreeInRow(row, col, val) : getFiveInRow(row, col, val)) > 0)
-						return true;
+		return checkWinInRow(val, (matrix.length == 3) ? 3 : 5);
+	}
+
+	public boolean checkWinInRow(int val, int lenWin) {
+		int row = rowMove, col = colMove, count = 1, len = matrix.length;
+		// check row
+		while (--col - 1 >= 0 && matrix[row][col] == val)
+			count++;
+
+		col = colMove;
+		while (++col < len && matrix[row][col] == val)
+			count++;
+
+		if (count >= lenWin)
+			return true;
+
+		// check column
+		col = colMove;
+		count = 1;
+		while (--row >= 0 && matrix[row][col] == val)
+			count++;
+
+		row = rowMove;
+		while (++row < len && matrix[row][col] == val)
+			count++;
+
+		if (count >= lenWin)
+			return true;
+
+		// checkDiagonalFromTopLeft
+		row = rowMove;
+		count = 1;
+		while (--row >= 0 && --col >= 0 && matrix[row][col] == val)
+			count++;
+
+		row = rowMove;
+		col = colMove;
+		while (++row < len && ++col < len && matrix[row][col] == val)
+			count++;
+
+		if (count >= lenWin)
+			return true;
+
+		// checkDiagonalFromTopRight
+		row = rowMove;
+		col = colMove;
+		count = 1;
+		while (--row >= 0 && ++col < len && matrix[row][col] == val)
+			count++;
+
+		row = rowMove;
+		col = colMove;
+		while (++row < len && --col >= 0 && matrix[row][col] == val)
+			count++;
+
+		if (count >= lenWin)
+			return true;
+		
 		return false;
-	}
-
-	public int getThreeInRow(int row, int col, int val) {
-		// check 4 hướng
-		int re = 0;
-		// dòng
-		try {
-			if (matrix[row][col + 1] == val && matrix[row][col - 1] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// cột
-		try {
-			if (matrix[row + 1][col] == val && matrix[row - 1][col] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// chéo chính
-		try {
-			if (matrix[row - 1][col - 1] == val && matrix[row + 1][col + 1] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// chéo phụ
-		try {
-			if (matrix[row - 1][col + 1] == val && matrix[row + 1][col - 1] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-
-		return re;
-	}
-
-	public int getFiveInRow(int row, int col, int val) {
-		// check 4 hướng
-		int re = 0;
-		// dòng
-		try {
-			if (matrix[row][col + 1] == val && matrix[row][col + 2] == val && matrix[row][col - 1] == val
-					&& matrix[row][col - 2] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// cột
-		try {
-			if (matrix[row + 1][col] == val && matrix[row + 2][col] == val && matrix[row - 1][col] == val
-					&& matrix[row - 2][col] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// chéo chính
-		try {
-			if (matrix[row - 1][col - 1] == val && matrix[row - 2][col - 2] == val && matrix[row + 1][col + 1] == val
-					&& matrix[row + 2][col + 2] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		// chéo phụ
-		try {
-			if (matrix[row - 1][col + 1] == val && matrix[row - 2][col + 2] == val && matrix[row + 1][col - 1] == val
-					&& matrix[row + 2][col - 2] == val)
-				re++;
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-
-		return re;
 	}
 
 	public int getLiveFour(int row, int col, int val) {
