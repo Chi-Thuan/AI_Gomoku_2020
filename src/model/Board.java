@@ -88,7 +88,6 @@ public class Board {
 				nUserWin++;
 			else
 				nComputerWin++;
-
 			mainFrame.updateScore();
 			mainFrame.showDialogEndGame(getTurn());
 

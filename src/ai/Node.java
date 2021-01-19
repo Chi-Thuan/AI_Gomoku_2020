@@ -20,7 +20,7 @@ public class Node {
 		rowMove = -1;
 		colMove = -1;
 		matrix = cloneMatrix(Board.table, Board.n);
-		used = Board.nSteps + 1;
+		used = Board.nSteps;
 	}
 
 	public Node(Node parent, int rowMove, int colMove, int val) {
