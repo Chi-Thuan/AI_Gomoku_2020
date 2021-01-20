@@ -130,12 +130,12 @@ public class Node {
 		if (live4 > 0)
 			return 1000000;
 
-		if (dead4 > 1 || dead4b > 1 || live3 > 1 || (live3 > 0 && dead4 > 0) || (live3 > 0 && dead4b > 0)
-				|| (live3 > 0 && dead3 > 0) || (live3 > 0 && dead3b > 0))
+		if (dead4 > 1 || (dead4 > 0 && dead4b > 0) || (dead4 > 0 && live3 > 0) || dead4b > 1
+				|| (dead4b > 0 && live3 > 0) || live3 > 1)
 			return 450000;
 
-		int eval = dead4 * 200000 + dead4b * 90000 + live3 * 40000 + dead3 * 10000 + dead3b * 90 + live2 * 40
-				+ dead2 * 10 + dead2b;
+		int eval = dead4 * 200000 + dead4b * 90000 + live3 * 40000 + dead3 * 15000 + dead3b * 7000 + live2 * 3000
+				+ dead2 * 500 + dead2b;
 
 		return eval;
 	}
@@ -1246,17 +1246,9 @@ public class Node {
 		this.colMove = colMove;
 	}
 
-//	public int getValue() {
-//		return value;
-//	}
-
 	public void setValue(int value) {
 		this.value = value;
 	}
-
-//	public List<Node> getChildren() {
-//		return children;
-//	}
 
 	public void setChildren(List<Node> children) {
 		this.children = children;

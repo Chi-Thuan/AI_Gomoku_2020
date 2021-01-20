@@ -13,7 +13,6 @@ public class AI {
 		alphaBeta = new AlphaBeta();
 	}
 
-
 	public void moveFirst() {
 		int n = board.getN();
 		int index = (n % 2 == 0) ? n / 2 - 1 : n / 2;
