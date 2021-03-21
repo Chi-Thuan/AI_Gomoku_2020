@@ -1,31 +1,30 @@
-import java.util.HashSet;
+package model;
 
-@SuppressWarnings("unused")
+import view.MainFrame;
+
 public class Board {
 
-	private byte n; // Kích thước hiện tại của bàn cờ
+	public static byte n; // Kích thước hiện tại của bàn cờ
 	private byte maxN; // Kích thước tối đa của bàn cờ
 	private byte defaultN; // Kích thước mặc định của bàn cờ
-	private byte lengthWin; // Kích thước win : 5 hoặc bé hơn 5, tùy vào kích thước bàn cờ
 	private short nUserWin; // Người chơi win
 	private short nComputerWin; // Máy win
 	public static boolean humanFirst; // Người đi trước
 	public static boolean userX; // Người chơi là quân X
 
 	public static short nSteps; // số nước đi
-	private boolean[][] used; // Đánh dấu đã đánh hay chưa
+	public static boolean[][] used; // Đánh dấu đã đánh hay chưa
 	public static int[] x; // Lưu phần row của các nước đi
 	public static int[] y; // Lưu phần column của các nước đi
 	public static int[][] table; // Lưu các nước đi
 	public static boolean isGameOver;
 
-	static MainFrame mainFrame;
+	private static MainFrame mainFrame;
 
 	public Board(MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
+		Board.mainFrame = mainFrame;
 		n = defaultN = 20;
 		maxN = 30;
-		lengthWin = 5;
 		nUserWin = 0;
 		nComputerWin = 0;
 		humanFirst = true;
@@ -49,12 +48,10 @@ public class Board {
 			for (int i = 0; i < n; i++)
 				arr[i] = 0;
 		isGameOver = false;
-		getLengthWin();
-
 	}
 
-	public boolean isCanMove(int row, int col) {
-		return !used[row][col];
+	public static boolean isCanMove(int row, int col) {
+		return row >= 0 && col >= 0 && row < n && col < n && !used[row][col];
 	}
 
 	public void addMove(int row, int col) {
@@ -80,12 +77,16 @@ public class Board {
 
 		checkFinalState(row, col, table[row][col]);
 		if (isGameOver) {
-			mainFrame.getScore(getTurn());
+			if (getTurn() == -1)
+				nUserWin++;
+			else
+				nComputerWin++;
+			mainFrame.updateScore();
 			mainFrame.showDialogEndGame(getTurn());
 
-		} else {
-			if (nSteps == getN() * getN())
-				mainFrame.showDialogEndGame(0);
+		} else if (nSteps == n * n) {
+			mainFrame.showDialogEndGame(0);
+			isGameOver = true;
 		}
 	}
 
@@ -103,7 +104,6 @@ public class Board {
 
 	// Hàm kiểm tra thắng thua
 	public void checkFinalState(int row, int col, int value) {
-
 		int tempRow = row;
 		int tempCol = col;
 
@@ -119,7 +119,7 @@ public class Board {
 			checkRow++;
 			col++;
 		}
-		if (checkRow >= getLengthWin() - 1) {
+		if (checkRow >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -137,7 +137,7 @@ public class Board {
 			row++;
 		}
 
-		if (checkCol >= getLengthWin() - 1) {
+		if (checkCol >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -159,7 +159,7 @@ public class Board {
 			col++;
 		}
 
-		if (checkDiagonalFromTopLeft >= getLengthWin() - 1) {
+		if (checkDiagonalFromTopLeft >= 4) {
 			isGameOver = true;
 			return;
 		}
@@ -181,7 +181,7 @@ public class Board {
 			col--;
 		}
 
-		if (checkDiagonalFromTopRight >= getLengthWin() - 1) {
+		if (checkDiagonalFromTopRight >= 4) {
 			isGameOver = true;
 			return;
 
@@ -190,66 +190,17 @@ public class Board {
 
 	// Hàm kiểm tra table có trống hay không
 	public boolean isEmpty() {
-		boolean check = false;
 		for (int[] arr : table)
 			for (int i = 0; i < n; i++)
-				if (arr[i] != 0) {
-					check = true;
-				} 
-
-		return check;
+				if (arr[i] != 0)
+					return false;
+		return true;
 	}
 
 	// Xóa điểm
 	public void resetScore() {
 		nUserWin = 0;
 		nComputerWin = 0;
-	}
-
-	// Hàm tính điểm
-	public void score(int winner) {
-		if (isHumanFirst() == true) {
-			if (userX) {
-				if (winner == -1) {
-					nUserWin++;
-
-				} else if (winner == 1) {
-					nComputerWin++;
-
-				}
-
-			} else {
-
-				if (winner == 1) {
-					nComputerWin++;
-
-				} else if (winner == -1) {
-					nUserWin++;
-
-				}
-			}
-		} else {
-			if (userX) {
-				if (winner == 1) {
-					nComputerWin++;
-
-				} else if (winner == -1) {
-					nUserWin++;
-
-				}
-
-			} else {
-
-				if (winner == -1) {
-					nUserWin++;
-
-				} else if (winner == 1) {
-					nComputerWin++;
-
-				}
-			}
-		}
-
 	}
 
 	// getters & setters
@@ -259,8 +210,7 @@ public class Board {
 	}
 
 	public void setN(byte n) {
-		this.n = n;
-		getLengthWin();
+		Board.n = n;
 	}
 
 	public byte getDefaultN() {
@@ -269,14 +219,6 @@ public class Board {
 
 	public void setDefaultN(byte defaultN) {
 		this.defaultN = defaultN;
-	}
-
-	public byte getLengthWin() {
-		return (byte) Math.min(5, n);
-	}
-
-	public void setLengthWin(byte lengthWin) {
-		this.lengthWin = lengthWin;
 	}
 
 	public short getnUserWin() {
@@ -324,7 +266,7 @@ public class Board {
 	}
 
 	public void setUsed(boolean[][] used) {
-		this.used = used;
+		Board.used = used;
 	}
 
 	public int[] getX() {
@@ -345,19 +287,6 @@ public class Board {
 
 	public int getTurn() {
 		return table[x[nSteps - 1]][y[nSteps - 1]];
-	}
-
-	public Board getDeepCopy() {
-		Board board = new Board(null);
-
-		for (int i = 0; i < board.getN(); i++) {
-			board.table[i] = this.table[i].clone();
-		}
-
-		board.nSteps = this.nSteps;
-		board.isGameOver = this.isGameOver;
-		board.lengthWin = this.lengthWin;
-		return board;
 	}
 
 	@Override
